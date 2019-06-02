@@ -17,7 +17,8 @@ export default {
       number: '',
       lengthNumber: '',
       outputNumber: '',
-      nativeNumbers: ['れい','いち','に','さん','よん','ご','ろく','なな','はち','きゅう','じゅう']
+      nativeNumbers: ['れい','いち','に','さん','よん','ご','ろく','なな','はち','きゅう','じゅう'],
+      hyakuNumbers: ['ひゃく','にひゃく','さんびゃく','よんひゃく','ごひゃく','ろっぴゃく','ななひゃく','はっぴゃく','きゅうひゃく']
     }
   },
 
@@ -34,12 +35,20 @@ export default {
     },
 
     selectRule() {
+      let numberToBeConverted = this.number;
+      let numberConverted;
       switch (this.lengthNumber) {
         case 1:
-          this.ruleOne();
+          numberConverted = this.ruleOne(numberToBeConverted);
+          this.setNumberConverted(numberConverted);
           break;
         case 2:
-          this.ruleTwo();
+          numberConverted = this.ruleTwo(numberToBeConverted);
+          this.setNumberConverted(numberConverted);
+          break;
+        case 3:
+          let numberConverted = this.ruleThree(numberToBeConverted);
+          this.setNumberConverted(numberConverted);
           break;
         default:
           this.outputNumber = 'no tengo idea'
@@ -47,32 +56,33 @@ export default {
           break;
       }
     },
-      ruleOne() {
-        let position = this.number
-        this.outputNumber = this.nativeNumbers[position]
-      },
-      ruleTwo() {
-        let positionOfFirstNumber = this.number.indexOf(1);//search the 1 number
-        let valueFirstNumber = this.number.slice(0,1);
-        let restOfNumber = this.number.slice(1);
-        let countFirstForm;
-        let ruleToTest = new RegExp(/([1-9]0)/);
-        let valueTest = ruleToTest.test(this.number);
 
-        // only for those numbers [10,...,90]
-        if(valueTest) {
-          switch (valueTest) {
-          case (this.lengthNumber === 2 && this.number != '10'):
-            this.outputNumber = this.nativeNumbers[valueFirstNumber] + this.nativeNumbers[10];
-            break;
-          case (this.number === '10'):
-            this.outputNumber = this.nativeNumbers[10];
-            break;
-          }
+    ruleOne(numberToBeConverted) {
+      let position = numberToBeConverted
+      return this.nativeNumbers[position]
+    },
+    ruleTwo(numberToBeConverted) {
+      let positionOfFirstNumber = numberToBeConverted.indexOf(1);//search the 1 number
+      let valueFirstNumber = numberToBeConverted.slice(0,1);
+      let restOfNumber = numberToBeConverted.slice(1);
+      let countFirstForm;
+      let ruleToTest = new RegExp(/([1-9]0)/);
+      let valueTest = ruleToTest.test(numberToBeConverted);
+      let numberToReturn = '';
 
-          return
+      // only for those numbers [10,...,90]
+      if(valueTest) {
+        switch (valueTest) {
+        case (numberToBeConverted != '10'):
+          numberToReturn = this.nativeNumbers[valueFirstNumber] + this.nativeNumbers[10];
+          break;
+        case (numberToBeConverted === '10'):
+          numberToReturn = this.nativeNumbers[10];
+          break;
         }
+      }
 
+      if(numberToReturn === '') {
         if(positionOfFirstNumber === 0) {
           countFirstForm = true
         } else {
@@ -80,11 +90,47 @@ export default {
         }
 
         if(countFirstForm) {
-          this.outputNumber = this.nativeNumbers[10] + this.nativeNumbers[restOfNumber]
+          numberToReturn = this.nativeNumbers[10] + this.nativeNumbers[restOfNumber]
         } else {
-          this.outputNumber = this.nativeNumbers[valueFirstNumber] + this.nativeNumbers[10] + this.nativeNumbers[restOfNumber]
+          numberToReturn = this.nativeNumbers[valueFirstNumber] + this.nativeNumbers[10] + this.nativeNumbers[restOfNumber]
         }
       }
+
+      return numberToReturn
+    },
+    ruleThree(numberToBeConverted) {
+      let valueFirstNumber = numberToBeConverted.slice(0,1);
+      let restOfNumber = numberToBeConverted.slice(1);
+      let ruleToTestRei = new RegExp(/([1-9]0[1-9])/);
+      let valueTestRei = ruleToTestRei.test(numberToBeConverted);
+      let ruleToTest = new RegExp(/([1-9]00)/);
+      let valueTest = ruleToTest.test(numberToBeConverted);
+      let numberToReturn = '';
+
+      //only for 100,200,...900
+      if(valueTest) {
+        numberToReturn = this.hyakuNumbers[valueFirstNumber - 1];
+      }
+
+      if(valueTestRei) {
+        restOfNumber = numberToBeConverted.slice(2);
+      }
+
+      if(numberToReturn === '') {
+        let restNumberEvaluated;
+        if(restOfNumber.length === 1) {
+          restNumberEvaluated = this.ruleOne(restOfNumber);
+        } else {
+          restNumberEvaluated = this.ruleTwo(restOfNumber);
+        }
+        numberToReturn = this.hyakuNumbers[valueFirstNumber - 1] + restNumberEvaluated;
+      }
+
+      return numberToReturn
+    },
+    setNumberConverted(numberConverted) {
+      this.outputNumber = numberConverted;
+    }
   }
 }
 </script>
