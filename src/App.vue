@@ -19,7 +19,8 @@ export default {
       outputNumber: '',
       nativeNumbers: ['れい','いち','に','さん','よん','ご','ろく','なな','はち','きゅう','じゅう'],
       hyakuNumbers: ['ひゃく','にひゃく','さんびゃく','よんひゃく','ごひゃく','ろっぴゃく','ななひゃく','はっぴゃく','きゅうひゃく'],
-      senNumbers: ['せん','にせん','さんぜん','よんせん','ごせん','ろくせん','ななせん','はっせん','きゅうせん']
+      senNumbers: ['せん','にせん','さんぜん','よんせん','ごせん','ろくせん','ななせん','はっせん','きゅうせん'],
+      manNumbers: ['まん','にまん','さんまん','よんまん','ごまん','ろくまん','ななまん','はちまん','きゅうまん']
     }
   },
 
@@ -36,37 +37,43 @@ export default {
         this.clear();
         return false
       }
-      this.selectRule();
+      this.selectRule(this.number, this.lengthNumber, true);
     },
 
     clear() {
       this.outputNumber = '';
     },
 
-    selectRule() {
-      let numberToBeConverted = this.number;
+    selectRule(number, lengthNumber, setNumberConverted) {
+      let numberToBeConverted = number;
       let numberConverted;
-      switch (this.lengthNumber) {
+
+      switch (lengthNumber) {
         case 1:
           numberConverted = this.ruleOne(numberToBeConverted);
-          this.setNumberConverted(numberConverted);
           break;
         case 2:
           numberConverted = this.ruleTwo(numberToBeConverted);
-          this.setNumberConverted(numberConverted);
           break;
         case 3:
           numberConverted = this.ruleThree(numberToBeConverted);
-          this.setNumberConverted(numberConverted);
           break;
         case 4:
-          let numberConverted = this.ruleFour(numberToBeConverted);
-          this.setNumberConverted(numberConverted);
+          numberConverted = this.ruleFour(numberToBeConverted);
+          break;
+        case 5:
+          numberConverted = this.ruleFive(numberToBeConverted);
           break;
         default:
           this.outputNumber = 'no tengo idea'
           console.log(this.lengthNumber)
           break;
+      }
+
+      if(setNumberConverted) {
+        this.setNumberConverted(numberConverted);
+      } else {
+        return numberConverted;
       }
     },
 
@@ -156,8 +163,8 @@ export default {
       if(!valueTest) {
         let restNumberEvaluated;
         for(let i = 0; i < restOfNumber.length; i++) {
-          let valueChart = restOfNumber.charAt(i);
-          if(valueChart !== '0') {
+          let valueChar = restOfNumber.charAt(i);
+          if(valueChar !== '0') {
             restOfNumber = restOfNumber.slice(i);
             switch (true) {
               case (i === 0):
@@ -178,6 +185,32 @@ export default {
       }
 
       return numberToReturn
+    },
+    ruleFive(numberToBeConverted) {
+      let valueFirstNumber = numberToBeConverted.slice(0,1);
+      let restOfNumber = numberToBeConverted.slice(1);
+      let ruleToTest = new RegExp(/([1-9]0000)/);
+      let valueTest = ruleToTest.test(numberToBeConverted);
+      let numberToReturn = '';
+
+      //only for 10000,20000,...90000
+      if(valueTest) {
+        numberToReturn = this.manNumbers[valueFirstNumber - 1];
+      }
+
+      if(!valueTest) {
+        for(let i = 0; i <= restOfNumber.length; i++) {
+          let position = i;
+          let valueChar = restOfNumber.charAt(i);
+          if(valueChar !== '0') {
+            restOfNumber = restOfNumber.slice(position);
+            break;
+          }
+        }
+        numberToReturn = this.manNumbers[valueFirstNumber - 1] + this.selectRule(restOfNumber, restOfNumber.length, false);
+      }
+
+      return numberToReturn;
     },
     setNumberConverted(numberConverted) {
       this.outputNumber = numberConverted;
