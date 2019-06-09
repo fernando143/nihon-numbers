@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <input type="text" v-model="number">
+    <input type="text" v-model="number" v-on:input="start">
     <button @click="start">Traducir</button>
     <div>
       <h5>{{ outputNumber }}</h5>
@@ -18,7 +18,8 @@ export default {
       lengthNumber: '',
       outputNumber: '',
       nativeNumbers: ['れい','いち','に','さん','よん','ご','ろく','なな','はち','きゅう','じゅう'],
-      hyakuNumbers: ['ひゃく','にひゃく','さんびゃく','よんひゃく','ごひゃく','ろっぴゃく','ななひゃく','はっぴゃく','きゅうひゃく']
+      hyakuNumbers: ['ひゃく','にひゃく','さんびゃく','よんひゃく','ごひゃく','ろっぴゃく','ななひゃく','はっぴゃく','きゅうひゃく'],
+      senNumbers: ['せん','にせん','さんぜん','よんせん','ごせん','ろくせん','ななせん','はっせん','きゅうせん']
     }
   },
 
@@ -31,7 +32,15 @@ export default {
       let length = this.number.length;
       this.lengthNumber = length;
 
+      if(!length) {
+        this.clear();
+        return false
+      }
       this.selectRule();
+    },
+
+    clear() {
+      this.outputNumber = '';
     },
 
     selectRule() {
@@ -47,7 +56,11 @@ export default {
           this.setNumberConverted(numberConverted);
           break;
         case 3:
-          let numberConverted = this.ruleThree(numberToBeConverted);
+          numberConverted = this.ruleThree(numberToBeConverted);
+          this.setNumberConverted(numberConverted);
+          break;
+        case 4:
+          let numberConverted = this.ruleFour(numberToBeConverted);
           this.setNumberConverted(numberConverted);
           break;
         default:
@@ -124,6 +137,44 @@ export default {
           restNumberEvaluated = this.ruleTwo(restOfNumber);
         }
         numberToReturn = this.hyakuNumbers[valueFirstNumber - 1] + restNumberEvaluated;
+      }
+
+      return numberToReturn
+    },
+    ruleFour(numberToBeConverted) {
+      let valueFirstNumber = numberToBeConverted.slice(0,1);
+      let restOfNumber = numberToBeConverted.slice(1);
+      let ruleToTest = new RegExp(/([1-9]000)/);
+      let valueTest = ruleToTest.test(numberToBeConverted);
+      let numberToReturn = '';
+
+      //only for 1000,2000,...9000
+      if(valueTest) {
+        numberToReturn = this.senNumbers[valueFirstNumber - 1];
+      }
+
+      if(!valueTest) {
+        let restNumberEvaluated;
+        for(let i = 0; i < restOfNumber.length; i++) {
+          let valueChart = restOfNumber.charAt(i);
+          if(valueChart !== '0') {
+            restOfNumber = restOfNumber.slice(i);
+            switch (true) {
+              case (i === 0):
+                restNumberEvaluated = this.ruleThree(restOfNumber);
+                break;
+              case (i === 1):
+                restNumberEvaluated = this.ruleTwo(restOfNumber);
+                break;
+              case (i === 2):
+                restNumberEvaluated = this.ruleOne(restOfNumber);
+                break;
+            }
+            break;
+          }
+        }
+
+        numberToReturn = this.senNumbers[valueFirstNumber - 1] + restNumberEvaluated;
       }
 
       return numberToReturn
