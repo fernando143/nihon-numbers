@@ -64,6 +64,9 @@ export default {
         case 5:
           numberConverted = this.ruleFive(numberToBeConverted);
           break;
+        case 6:
+          numberConverted = this.ruleSix(numberToBeConverted);
+          break;
         default:
           this.outputNumber = 'no tengo idea'
           console.log(this.lengthNumber)
@@ -208,6 +211,39 @@ export default {
           }
         }
         numberToReturn = this.manNumbers[valueFirstNumber - 1] + this.selectRule(restOfNumber, restOfNumber.length, false);
+      }
+
+      return numberToReturn;
+    },
+    ruleSix(numberToBeConverted) {
+      let valueFirstNumber = numberToBeConverted.slice(0,1);
+      let firstTwoNumbers = numberToBeConverted.slice(0,2);
+      let restOfNumber = numberToBeConverted.slice(2);
+      let ruleToTest = new RegExp(/([1-9]00000)/);
+      let valueTest = ruleToTest.test(numberToBeConverted);
+      let foundNumber = false;
+      let numberToReturn = '';
+
+      //only for 100000,200000,...90000
+      if(valueTest) {
+        numberToReturn = this.ruleTwo(firstTwoNumbers) + this.manNumbers[0];
+      }
+
+      if(!valueTest) {
+        for(let i = 0; i < restOfNumber.length; i++) {
+          let position = i;
+          let valueChar = restOfNumber.charAt(i);
+          if(valueChar !== '0') {
+            foundNumber = true;
+            restOfNumber = restOfNumber.slice(position);
+            break;
+          }
+        }
+        if(foundNumber) {
+          numberToReturn = this.ruleTwo(firstTwoNumbers) + this.manNumbers[0] + this.selectRule(restOfNumber, restOfNumber.length, false);
+        } else {
+          numberToReturn = this.ruleTwo(firstTwoNumbers) + this.manNumbers[0];
+        }
       }
 
       return numberToReturn;
