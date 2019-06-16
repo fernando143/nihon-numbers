@@ -10,7 +10,7 @@ const state =  {
 const getters = {
     getHiraganaNumber: state => state.hiraganaNumber,
     getKatakanaNumber: state => state.katakanaNumber,
-    kanjiNumber: state => state.kanjiNumber
+    getKanjiNumber: state => state.kanjiNumber
 }
 
 const mutations = {
@@ -18,12 +18,20 @@ const mutations = {
         state.hiraganaNumber = payload.hiraganaNumber
         state.katakanaNumber = payload.katakanaNumber
         state.kanjiNumber = payload.kanjiNumber
+    },
+    UKNOWN_NUMBER: (state, payload) => {
+        state.hiraganaNumber = payload
+        state.katakanaNumber = payload
+        state.kanjiNumber = payload
     }
 }
 
 const actions =  {
     setNumbers: (context, payload) => {
         context.commit('SET_NUMBERS', payload)
+    },
+    uknowNumber: (context, payload) => {
+        context.commit('UKNOWN_NUMBER', payload)
     }
 }
 

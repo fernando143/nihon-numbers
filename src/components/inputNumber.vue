@@ -17,10 +17,52 @@ export default {
         number: '',
         lengthNumber: '',
         outputNumber: '',
-        nativeNumbers: ['れい','いち','に','さん','よん','ご','ろく','なな','はち','きゅう','じゅう'],
-        hyakuNumbers: ['ひゃく','にひゃく','さんびゃく','よんひゃく','ごひゃく','ろっぴゃく','ななひゃく','はっぴゃく','きゅうひゃく'],
-        senNumbers: ['せん','にせん','さんぜん','よんせん','ごせん','ろくせん','ななせん','はっせん','きゅうせん'],
-        manNumbers: ['まん','にまん','さんまん','よんまん','ごまん','ろくまん','ななまん','はちまん','きゅうまん']
+        nativeNumbers: [
+          { hira: 'れい', kata: 'レイ', kanji: '' },
+          { hira: 'いち', kata: 'イチ', kanji: '一' },
+          { hira: 'に', kata: '二', kanji: '二' },
+          { hira: 'さん', kata: 'サン', kanji: '三' },
+          { hira: 'よん', kata: 'ヨン', kanji: '四' },
+          { hira: 'ご', kata: 'ゴ', kanji: '五' },
+          { hira: 'ろく', kata: 'ロク', kanji: '六' },
+          { hira: 'なな', kata: 'ナナ', kanji: '七' },
+          { hira: 'はち', kata: 'ハチ', kanji: '八' },
+          { hira: 'きゅう', kata: 'キュウ', kanji: '九' },
+          { hira: 'じゅう', kata: 'ジュウ', kanji: '十' },
+        ],
+        hyakuNumbers: [
+          { hira: 'ひゃく', kata: 'ヒャク', kanji: '百' },
+          { hira: 'にひゃく', kata: 'ニヒャク', kanji: '二百' },
+          { hira: 'さんびゃく', kata: 'サンビャク', kanji: '三百' },
+          { hira: 'よんひゃく', kata: 'ヨンヒャク', kanji: '四百' },
+          { hira: 'ごひゃく', kata: 'ゴヒャク', kanji: '五百' },
+          { hira: 'ろっぴゃく', kata: 'ロッピャク', kanji: '六百' },
+          { hira: 'ななひゃく', kata: 'ナナヒャク', kanji: '七百' },
+          { hira: 'はっぴゃく', kata: 'ハッピャク', kanji: '八百' },
+          { hira: 'きゅうひゃく', kata: 'キュウヒャク', kanji: '九百' }
+        ],
+        senNumbers: [
+          { hira:'せん', kata: 'セン', kanji: '千' },
+          { hira:'にせん', kata: 'ニセン', kanji: '二千' },
+          { hira:'さんぜん', kata: 'サンゼン', kanji: '三千' },
+          { hira:'よんせん', kata: 'ヨンセン', kanji: '四千' },
+          { hira:'ごせん', kata: 'ゴセン', kanji: '五千' },
+          { hira:'ろくせん', kata: 'ロクセン', kanji: '六千' },
+          { hira:'ななせん', kata: 'ナナセン', kanji: '七千' },
+          { hira:'はっせん', kata: 'ハッセン', kanji: '八千' },
+          { hira:'きゅうせん', kata: 'キュウセン', kanji: '九千' }
+        ],
+        manNumbers: [
+          { hira: 'まん', kata: 'マン', kanji: '万' },
+          { hira: 'にまん', kata: 'ニマン', kanji: '二万' },
+          { hira: 'さんまん', kata: 'サンマン', kanji: '三万' },
+          { hira: 'よんまん', kata: 'ヨンマン', kanji: '四万' },
+          { hira: 'ごまん', kata: 'ゴマン', kanji: '五万' },
+          { hira: 'ろくまん', kata: 'ロクマン', kanji: '六万' },
+          { hira: 'ななまん', kata: 'ナナマン', kanji: '七万' },
+          { hira: 'はちまん', kata: 'ハチマン', kanji: '八万' },
+          { hira: 'きゅうまん', kata: 'キュウマン', kanji: '九万' }
+        ]
       }
     },
     methods: {
@@ -45,6 +87,7 @@ export default {
 
     selectRule(number, lengthNumber, setNumberConverted) {
       let numberToBeConverted = number;
+      let convertNumber = setNumberConverted
       let numberConverted;
 
       switch (lengthNumber) {
@@ -67,12 +110,12 @@ export default {
           numberConverted = this.ruleSix(numberToBeConverted);
           break;
         default:
-          this.outputNumber = 'no tengo idea'
-          console.log(this.lengthNumber)
+          this.$store.dispatch('uknowNumber','分かりません')
+          convertNumber = false
           break;
       }
 
-      if(setNumberConverted) {
+      if(convertNumber) {
         this.setNumberConverted(numberConverted);
       } else {
         return numberConverted;
@@ -81,7 +124,11 @@ export default {
 
     ruleOne(numberToBeConverted) {
       let position = numberToBeConverted
-      return this.nativeNumbers[position]
+      return {
+        hira: this.nativeNumbers[position].hira,
+        kata: this.nativeNumbers[position].kata,
+        kanji: this.nativeNumbers[position].kanji
+      }
     },
     ruleTwo(numberToBeConverted) {
       let positionOfFirstNumber = numberToBeConverted.indexOf(1);//search the 1 number
@@ -96,10 +143,18 @@ export default {
       if(valueTest) {
         switch (valueTest) {
         case (numberToBeConverted != '10'):
-          numberToReturn = this.nativeNumbers[valueFirstNumber] + this.nativeNumbers[10];
+          numberToReturn = {
+            hira: this.nativeNumbers[valueFirstNumber].hira + this.nativeNumbers[10].hira,
+            kata: this.nativeNumbers[valueFirstNumber].kata + this.nativeNumbers[10].kata,
+            kanji: this.nativeNumbers[valueFirstNumber].kanji + this.nativeNumbers[10].kanji
+            }
           break;
         case (numberToBeConverted === '10'):
-          numberToReturn = this.nativeNumbers[10];
+          numberToReturn = {
+            hira: this.nativeNumbers[10].hira,
+            kata: this.nativeNumbers[10].kata,
+            kanji: this.nativeNumbers[10].kanji
+          }
           break;
         }
       }
@@ -112,9 +167,17 @@ export default {
         }
 
         if(countFirstForm) {
-          numberToReturn = this.nativeNumbers[10] + this.nativeNumbers[restOfNumber]
+          numberToReturn = {
+            hira: this.nativeNumbers[10].hira + this.nativeNumbers[restOfNumber].hira,
+            kata: this.nativeNumbers[10].kata + this.nativeNumbers[restOfNumber].kata,
+            kanji: this.nativeNumbers[10].kanji + this.nativeNumbers[restOfNumber].kanji
+          }
         } else {
-          numberToReturn = this.nativeNumbers[valueFirstNumber] + this.nativeNumbers[10] + this.nativeNumbers[restOfNumber]
+          numberToReturn = {
+            hira: this.nativeNumbers[valueFirstNumber].hira + this.nativeNumbers[10].hira + this.nativeNumbers[restOfNumber].hira,
+            kata: this.nativeNumbers[valueFirstNumber].kata + this.nativeNumbers[10].kata + this.nativeNumbers[restOfNumber].kata,
+            kanji: this.nativeNumbers[valueFirstNumber].kanji + this.nativeNumbers[10].kanji + this.nativeNumbers[restOfNumber].kanji,
+          }
         }
       }
 
@@ -131,7 +194,11 @@ export default {
 
       //only for 100,200,...900
       if(valueTest) {
-        numberToReturn = this.hyakuNumbers[valueFirstNumber - 1];
+        numberToReturn = {
+          hira: this.hyakuNumbers[valueFirstNumber - 1].hira,
+          kata: this.hyakuNumbers[valueFirstNumber - 1].kata,
+          kanji: this.hyakuNumbers[valueFirstNumber - 1].kanji,
+        }
       }
 
       if(valueTestRei) {
@@ -139,13 +206,27 @@ export default {
       }
 
       if(numberToReturn === '') {
-        let restNumberEvaluated;
+        let restNumberEvaluated, getRestOfNumber;
         if(restOfNumber.length === 1) {
-          restNumberEvaluated = this.ruleOne(restOfNumber);
+          getRestOfNumber = this.ruleOne(restOfNumber);
+          restNumberEvaluated = {
+            hira: getRestOfNumber.hira,
+            kata: getRestOfNumber.kata,
+            kanji: getRestOfNumber.kanji
+          }
         } else {
-          restNumberEvaluated = this.ruleTwo(restOfNumber);
+          getRestOfNumber = this.ruleTwo(restOfNumber);
+          restNumberEvaluated = {
+            hira: getRestOfNumber.hira,
+            kata: getRestOfNumber.kata,
+            kanji: getRestOfNumber.kanji
+          }
         }
-        numberToReturn = this.hyakuNumbers[valueFirstNumber - 1] + restNumberEvaluated;
+        numberToReturn = {
+          hira: this.hyakuNumbers[valueFirstNumber - 1].hira + restNumberEvaluated.hira,
+          kata: this.hyakuNumbers[valueFirstNumber - 1].kata + restNumberEvaluated.kata,
+          kanji: this.hyakuNumbers[valueFirstNumber - 1].kanji + restNumberEvaluated.kanji,
+        }
       }
 
       return numberToReturn
@@ -159,31 +240,56 @@ export default {
 
       //only for 1000,2000,...9000
       if(valueTest) {
-        numberToReturn = this.senNumbers[valueFirstNumber - 1];
+        numberToReturn = {
+          hira: this.senNumbers[valueFirstNumber - 1].hira,
+          kata: this.senNumbers[valueFirstNumber - 1].kata,
+          kanji: this.senNumbers[valueFirstNumber - 1].kanji,
+        }
       }
 
       if(!valueTest) {
-        let restNumberEvaluated;
+        let restNumberEvaluated, getRestOfNumber;
         for(let i = 0; i < restOfNumber.length; i++) {
           let valueChar = restOfNumber.charAt(i);
           if(valueChar !== '0') {
             restOfNumber = restOfNumber.slice(i);
             switch (true) {
               case (i === 0):
-                restNumberEvaluated = this.ruleThree(restOfNumber);
+                getRestOfNumber = this.ruleThree(restOfNumber);
+                restNumberEvaluated = {
+                  hira: getRestOfNumber.hira,
+                  kata: getRestOfNumber.kata,
+                  kanji: getRestOfNumber.kanji
+                }
                 break;
+
               case (i === 1):
-                restNumberEvaluated = this.ruleTwo(restOfNumber);
+                getRestOfNumber = this.ruleTwo(restOfNumber);
+                restNumberEvaluated = {
+                  hira: getRestOfNumber.hira,
+                  kata: getRestOfNumber.kata,
+                  kanji: getRestOfNumber.kanji
+                }
                 break;
+
               case (i === 2):
-                restNumberEvaluated = this.ruleOne(restOfNumber);
+                getRestOfNumber = this.ruleOne(restOfNumber);
+                restNumberEvaluated = {
+                  hira: getRestOfNumber.hira,
+                  kata: getRestOfNumber.kata,
+                  kanji: getRestOfNumber.kanji
+                }
                 break;
             }
             break;
           }
         }
 
-        numberToReturn = this.senNumbers[valueFirstNumber - 1] + restNumberEvaluated;
+        numberToReturn = {
+          hira: this.senNumbers[valueFirstNumber - 1].hira + restNumberEvaluated.hira,
+          kata: this.senNumbers[valueFirstNumber - 1].kata + restNumberEvaluated.kata,
+          kanji: this.senNumbers[valueFirstNumber - 1].kanji + restNumberEvaluated.kanji,
+        }
       }
 
       return numberToReturn
@@ -197,7 +303,11 @@ export default {
 
       //only for 10000,20000,...90000
       if(valueTest) {
-        numberToReturn = this.manNumbers[valueFirstNumber - 1];
+        numberToReturn = {
+          hira: this.manNumbers[valueFirstNumber - 1].hira,
+          kata: this.manNumbers[valueFirstNumber - 1].kata,
+          kanji: this.manNumbers[valueFirstNumber - 1].kanji,
+        }
       }
 
       if(!valueTest) {
@@ -209,7 +319,12 @@ export default {
             break;
           }
         }
-        numberToReturn = this.manNumbers[valueFirstNumber - 1] + this.selectRule(restOfNumber, restOfNumber.length, false);
+        let selectRule = this.selectRule(restOfNumber, restOfNumber.length, false);
+        numberToReturn = {
+          hira: this.manNumbers[valueFirstNumber - 1].hira + selectRule.hira,
+          kata: this.manNumbers[valueFirstNumber - 1].kata + selectRule.kata,
+          kanji: this.manNumbers[valueFirstNumber - 1].kanji + selectRule.kanji
+        }
       }
 
       return numberToReturn;
@@ -222,10 +337,16 @@ export default {
       let valueTest = ruleToTest.test(numberToBeConverted);
       let foundNumber = false;
       let numberToReturn = '';
+      let getRuleTwo = this.ruleTwo(firstTwoNumbers);
+      let getSelectRule;
 
       //only for 100000,200000,...90000
       if(valueTest) {
-        numberToReturn = this.ruleTwo(firstTwoNumbers) + this.manNumbers[0];
+        numberToReturn = {
+          hira: getRuleTwo.hira + this.manNumbers[0].hira,
+          kata: getRuleTwo.kata + this.manNumbers[0].kata,
+          kanji: getRuleTwo.kanji + this.manNumbers[0].kanji,
+        }
       }
 
       if(!valueTest) {
@@ -238,21 +359,30 @@ export default {
             break;
           }
         }
+
         if(foundNumber) {
-          numberToReturn = this.ruleTwo(firstTwoNumbers) + this.manNumbers[0] + this.selectRule(restOfNumber, restOfNumber.length, false);
+          getSelectRule = this.selectRule(restOfNumber, restOfNumber.length, false)
+          numberToReturn = {
+            hira: getRuleTwo.hira + this.manNumbers[0].hira + getSelectRule.hira,
+            kata: getRuleTwo.kata + this.manNumbers[0].kata + getSelectRule.kata,
+            kanji: getRuleTwo.kanji + this.manNumbers[0].kanji + getSelectRule.kanji,
+            }
         } else {
-          numberToReturn = this.ruleTwo(firstTwoNumbers) + this.manNumbers[0];
+          numberToReturn = {
+            hira: getRuleTwo.hira + this.manNumbers[0].hira,
+            kata: getRuleTwo.kata + this.manNumbers[0].kata,
+            kanji: getRuleTwo.kanji + this.manNumbers[0].kanji,
+          }
         }
       }
 
       return numberToReturn;
     },
     setNumberConverted(numberConverted) {
-      this.outputNumber = numberConverted;
       this.$store.dispatch('setNumbers', {
-        hiraganaNumber: numberConverted,
-        katakanaNumber: 'katakanaNumber',
-        kanjiNumber: 'kanjiNumber'
+        hiraganaNumber: numberConverted.hira,
+        katakanaNumber: numberConverted.kata,
+        kanjiNumber: numberConverted.kanji
       })
     }
   }

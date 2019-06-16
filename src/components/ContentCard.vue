@@ -21,7 +21,7 @@
                         <v-card-title primary-title>
                             <div>
                                 <h3 class="headline japaneseFont">カタカナ</h3>
-                                <span class=".body-2 japaneseFont japaneseFont--light">outputNumber</span>
+                                <span class=".body-2 japaneseFont japaneseFont--light">{{ katakanaNumber }}</span>
                             </div>
                         </v-card-title>
                     </v-card>
@@ -32,7 +32,7 @@
                         <v-card-title primary-title>
                             <div>
                                 <h3 class="headline japaneseFont">漢字</h3>
-                                <span class=".body-2 japaneseFont japaneseFont--light">outputNumber</span>
+                                <span class=".body-2 japaneseFont japaneseFont--light">{{ kanjiNumber }}</span>
                             </div>
                         </v-card-title>
                     </v-card>
@@ -47,8 +47,16 @@
 export default {
    computed: {
        hiraganaNumber() {
-           let value = this.$store.getters.getHiraganaNumber
-           return value
+           let hiragana = this.$store.getters.getHiraganaNumber
+           return hiragana
+       },
+       katakanaNumber() {
+           let katakana = this.$store.getters.getKatakanaNumber
+           return katakana
+       },
+       kanjiNumber() {
+           let kanji = this.$store.getters.getKanjiNumber
+           return kanji
        }
    }
 }
