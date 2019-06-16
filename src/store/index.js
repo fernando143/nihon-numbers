@@ -23,6 +23,11 @@ const mutations = {
         state.hiraganaNumber = payload
         state.katakanaNumber = payload
         state.kanjiNumber = payload
+    },
+    CLEAR: (state, payload) => {
+        state.hiraganaNumber = payload
+        state.katakanaNumber = payload
+        state.kanjiNumber = payload
     }
 }
 
@@ -32,6 +37,9 @@ const actions =  {
     },
     uknowNumber: (context, payload) => {
         context.commit('UKNOWN_NUMBER', payload)
+    },
+    clear: (context, payload) => {
+        context.commit('CLEAR', payload)
     }
 }
 
