@@ -5,7 +5,7 @@
     <Content-card></Content-card>
     <v-footer class="pa-3">
       <v-spacer></v-spacer>
-      <div>v0.3.2 - &copy; {{ new Date().getFullYear() }}</div>
+      <div>v0.4.2 - &copy; {{ new Date().getFullYear() }}</div>
   </v-footer>
   </div>
 </template>

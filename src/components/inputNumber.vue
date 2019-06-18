@@ -62,6 +62,17 @@ export default {
           { hira: 'ななまん', kata: 'ナナマン', kanji: '七万' },
           { hira: 'はちまん', kata: 'ハチマン', kanji: '八万' },
           { hira: 'きゅうまん', kata: 'キュウマン', kanji: '九万' }
+        ],
+        okuNumbers: [
+          { hira: 'おく', kata: 'オク', kanji: '億' },
+          { hira: 'におく', kata: 'ニオク', kanji: '二億' },
+          { hira: 'さんおく', kata: 'サンオク', kanji: '三億' },
+          { hira: 'よんおく', kata: 'ヨンオク', kanji: '四億' },
+          { hira: 'ごおく', kata: 'ゴオク', kanji: '五億' },
+          { hira: 'ろくおく', kata: 'ロクオク', kanji: '六億' },
+          { hira: 'ななおく', kata: 'ナナオク', kanji: '七億' },
+          { hira: 'はちおく', kata: 'ハチオク', kanji: '八億' },
+          { hira: 'きゅうおく', kata: 'キュウオク', kanji: '九億' }
         ]
       }
     },
@@ -111,6 +122,12 @@ export default {
           break;
         case 7:
           numberConverted = this.ruleSeven(numberToBeConverted);
+          break;
+        case 8:
+          numberConverted = this.ruleEight(numberToBeConverted);
+          break;
+         case 9:
+          numberConverted = this.ruleNine(numberToBeConverted);
           break;
         default:
           this.$store.dispatch('uknowNumber','分かりません')
@@ -424,6 +441,102 @@ export default {
             hira: getRuleThree.hira + this.manNumbers[0].hira,
             kata: getRuleThree.kata + this.manNumbers[0].kata,
             kanji: getRuleThree.kanji + this.manNumbers[0].kanji,
+          }
+        }
+      }
+
+      return numberToReturn;
+    },
+    ruleEight(numberToBeConverted) {
+      let valueFirstNumber = numberToBeConverted.slice(0,1);
+      let firstFourNumbers = numberToBeConverted.slice(0,4);
+      let restOfNumber = numberToBeConverted.slice(4);
+      let ruleToTest = new RegExp(/([1-9]0000000)/);
+      let valueTest = ruleToTest.test(numberToBeConverted);
+      let foundNumber = false;
+      let numberToReturn = '';
+      let getRuleFour = this.ruleFour(firstFourNumbers);
+      let getSelectRule;
+
+      //only for 10000000,20000000,...90000000
+      if(valueTest) {
+        numberToReturn = {
+          hira: getRuleFour.hira + this.manNumbers[0].hira,
+          kata: getRuleFour.kata + this.manNumbers[0].kata,
+          kanji: getRuleFour.kanji + this.manNumbers[0].kanji,
+        }
+      }
+
+      if(!valueTest) {
+        for(let i = 0; i < restOfNumber.length; i++) {
+          let position = i;
+          let valueChar = restOfNumber.charAt(i);
+          if(valueChar !== '0') {
+            foundNumber = true;
+            restOfNumber = restOfNumber.slice(position);
+            break;
+          }
+        }
+
+        if(foundNumber) {
+          getSelectRule = this.selectRule(restOfNumber, restOfNumber.length, false)
+          numberToReturn = {
+            hira: getRuleFour.hira + this.manNumbers[0].hira + getSelectRule.hira,
+            kata: getRuleFour.kata + this.manNumbers[0].kata + getSelectRule.kata,
+            kanji: getRuleFour.kanji + this.manNumbers[0].kanji + getSelectRule.kanji,
+            }
+        } else {
+          numberToReturn = {
+            hira: getRuleFour.hira + this.manNumbers[0].hira,
+            kata: getRuleFour.kata + this.manNumbers[0].kata,
+            kanji: getRuleFour.kanji + this.manNumbers[0].kanji,
+          }
+        }
+      }
+
+      return numberToReturn;
+    },
+    ruleNine(numberToBeConverted) {
+      let valueFirstNumber = numberToBeConverted.slice(0,1);
+      let restOfNumber = numberToBeConverted.slice(1);
+      let ruleToTest = new RegExp(/([1-9]00000000)/);
+      let valueTest = ruleToTest.test(numberToBeConverted);
+      let foundNumber = false;
+      let numberToReturn = '';
+      let getSelectRule;
+
+      //only for 100000000,200000000,...900000000
+      if(valueTest) {
+        numberToReturn = {
+          hira: this.okuNumbers[valueFirstNumber - 1].hira,
+          kata: this.okuNumbers[valueFirstNumber - 1].kata,
+          kanji: this.okuNumbers[valueFirstNumber - 1].kanji,
+        }
+      }
+
+      if(!valueTest) {
+        for(let i = 0; i < restOfNumber.length; i++) {
+          let position = i;
+          let valueChar = restOfNumber.charAt(i);
+          if(valueChar !== '0') {
+            foundNumber = true;
+            restOfNumber = restOfNumber.slice(position);
+            break;
+          }
+        }
+
+        if(foundNumber) {
+          getSelectRule = this.selectRule(restOfNumber, restOfNumber.length, false)
+          numberToReturn = {
+            hira: this.okuNumbers[valueFirstNumber - 1].hira + getSelectRule.hira,
+            kata: this.okuNumbers[valueFirstNumber - 1].kata + getSelectRule.kata,
+            kanji: this.okuNumbers[valueFirstNumber - 1].kanji + getSelectRule.kanji
+            }
+        } else {
+          numberToReturn = {
+            hira: this.okuNumbers[ - 1].hira + this.manNumbers[0].hira,
+            kata: this.okuNumbers[ - 1].kata + this.manNumbers[0].kata,
+            kanji: this.okuNumbers[ - 1].kanji + this.manNumbers[0].kanji,
           }
         }
       }
