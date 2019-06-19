@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <Header></Header>
-    <Input-number></Input-number>
-    <Content-card></Content-card>
+    <router-view></router-view>
     <v-footer class="pa-3">
       <v-spacer></v-spacer>
       <div>v0.4.2 - &copy; {{ new Date().getFullYear() }}</div>
@@ -12,14 +11,10 @@
 
 <script>
 import Header from './components/Header'
-import InputNumber from './components/InputNumber'
-import ContentCard from './components/ContentCard'
 export default {
   name: 'App',
   components: {
-    Header,
-    InputNumber,
-    ContentCard
+    Header
   },
   data() {
     return {
@@ -29,7 +24,6 @@ export default {
 </script>
 
 <style>
-
 .japaneseFont {
   font-family: 'Noto Serif JP', serif !important;
 }
