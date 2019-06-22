@@ -15,6 +15,7 @@ export default {
     data() {
       return {
         number: '',
+        naturalNumber: '',
         lengthNumber: '',
         outputNumber: '',
         nativeNumbers: [
@@ -78,18 +79,53 @@ export default {
     },
     methods: {
     start() {
-      this.calculateLength();
+      this.number = this.setMaruNumber(this.number)
+      this.naturalNumber = this.getNaturalNumber(this.number)
+      this.calculateLength(this.naturalNumber );
     },
+    setMaruNumber(number) {
+      let numberToConvert = [];
+      for(let i = 0; i < number.length; i++) {
+        if(number.charAt(i) != '.') {
+          numberToConvert.push(number.charAt(i))
+        }
+      }
+      const reverseNumber = numberToConvert.reverse()
+      let counter = 0;
+      const numberWithMaru = reverseNumber.map((num, index) => {
+        let isPar = index % 2
+        counter = counter + 1
+        if(isPar === 0 && counter > 3) {
+          counter = 0
+          return `${num}.`
+        } else {
+          return num
+        }
+      })
+      const numberToReturn = numberWithMaru.reverse().join("")
 
-    calculateLength() {
-      let length = this.number.length;
+      return numberToReturn
+    },
+    getNaturalNumber(numberWithMaru) {
+      let numberToConvert = numberWithMaru.split('')
+      let numberWithoutMaru = numberToConvert.filter(num => {
+        if(num != '.') {
+          return num
+        }
+      })
+      let numberToReturn = numberWithoutMaru.join('')
+
+      return numberToReturn
+    },
+    calculateLength(naturalNumber) {
+      let length = naturalNumber.length;
       this.lengthNumber = length;
 
       if(!length) {
         this.clear();
         return false
       }
-      this.selectRule(this.number, this.lengthNumber, true);
+      this.selectRule(this.naturalNumber, this.lengthNumber, true);
     },
 
     clear() {
@@ -126,8 +162,11 @@ export default {
         case 8:
           numberConverted = this.ruleEight(numberToBeConverted);
           break;
-         case 9:
+        case 9:
           numberConverted = this.ruleNine(numberToBeConverted);
+          break;
+        case 10:
+          numberConverted = this.ruleTen(numberToBeConverted);
           break;
         default:
           this.$store.dispatch('uknowNumber','分かりません')
@@ -537,6 +576,55 @@ export default {
             hira: this.okuNumbers[ - 1].hira + this.manNumbers[0].hira,
             kata: this.okuNumbers[ - 1].kata + this.manNumbers[0].kata,
             kanji: this.okuNumbers[ - 1].kanji + this.manNumbers[0].kanji,
+          }
+        }
+      }
+
+      return numberToReturn;
+    },
+    ruleTen(numberToBeConverted) {
+      let valueFirstNumber = numberToBeConverted.slice(0,1);
+      let firstTwoNumbers = numberToBeConverted.slice(0,2);
+      let restOfNumber = numberToBeConverted.slice(2);
+      let ruleToTest = new RegExp(/([1-9]000000000)/);
+      let valueTest = ruleToTest.test(numberToBeConverted);
+      let foundNumber = false;
+      let numberToReturn = '';
+      let getRuleTwo = this.ruleTwo(firstTwoNumbers);
+      let getSelectRule;
+
+      //only for 10.0000.0000,20.0000.0000,...90.0000.0000
+      if(valueTest) {
+        numberToReturn = {
+          hira: getRuleTwo.hira + this.okuNumbers[0].hira,
+          kata: getRuleTwo.kata + this.okuNumbers[0].kata,
+          kanji: getRuleTwo.kanji + this.okuNumbers[0].kanji
+        }
+      }
+
+      if(!valueTest) {
+        for(let i = 0; i < restOfNumber.length; i++) {
+          let position = i;
+          let valueChar = restOfNumber.charAt(i);
+          if(valueChar !== '0') {
+            foundNumber = true;
+            restOfNumber = restOfNumber.slice(position);
+            break;
+          }
+        }
+
+        if(foundNumber) {
+          getSelectRule = this.selectRule(restOfNumber, restOfNumber.length, false)
+          numberToReturn = {
+            hira: getRuleTwo.hira + this.okuNumbers[0].hira + getSelectRule.hira,
+            kata: getRuleTwo.kata + this.okuNumbers[0].kata + getSelectRule.kata,
+            kanji: getRuleTwo.kanji + this.okuNumbers[0].kanji + getSelectRule.kanji
+            }
+        } else {
+          numberToReturn = {
+            hira: getRuleTwo.hira + this.okuNumbers[0].hira,
+            kata: getRuleTwo.kata + this.okuNumbers[0].kata,
+            kanji: getRuleTwo.kanji + this.okuNumbers[0].kanji
           }
         }
       }
