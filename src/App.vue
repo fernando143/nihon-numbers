@@ -1,24 +1,23 @@
 <template>
   <div id="app">
     <Header></Header>
+    <menu-header></menu-header>
     <router-view></router-view>
     <v-footer class="pa-3">
       <v-spacer></v-spacer>
-      <div>v0.5.2 - &copy; {{ new Date().getFullYear() }}</div>
+      <div>v0.6.2 - &copy; {{ new Date().getFullYear() }}</div>
   </v-footer>
   </div>
 </template>
 
 <script>
 import Header from './components/Header'
+import MenuHeader from './components/Menu'
 export default {
   name: 'App',
   components: {
-    Header
-  },
-  data() {
-    return {
-    }
+    Header,
+    MenuHeader
   }
 }
 </script>

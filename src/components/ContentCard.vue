@@ -9,7 +9,10 @@
                     <v-card color="indigo" class="card white--text">
                         <v-card-title primary-title>
                             <div>
-                                <h3 class="headline japaneseFont">ひらがな</h3>
+                                <div class="customTitle">
+                                    <h3 class="headline japaneseFont">ひらがな</h3>
+                                    <span class="japaneseFont grey--text text--lighten-3">Hiragana</span>
+                                </div>
                                 <span class=".body-2 japaneseFont japaneseFont--light">{{ hiraganaNumber }}</span>
                             </div>
                         </v-card-title>
@@ -20,7 +23,10 @@
                     <v-card color="indigo" class="card white--text">
                         <v-card-title primary-title>
                             <div>
-                                <h3 class="headline japaneseFont">カタカナ</h3>
+                                <div class="customTitle">
+                                    <h3 class="headline japaneseFont">カタカナ</h3>
+                                    <span class="japaneseFont grey--text text--lighten-3">Katakana</span>
+                                </div>
                                 <span class=".body-2 japaneseFont japaneseFont--light">{{ katakanaNumber }}</span>
                             </div>
                         </v-card-title>
@@ -31,7 +37,10 @@
                     <v-card color="indigo" class="card white--text">
                         <v-card-title primary-title>
                             <div>
-                                <h3 class="headline japaneseFont">漢字</h3>
+                                <div class="customTitle">
+                                    <h3 class="headline japaneseFont">漢字</h3>
+                                    <span class="japaneseFont grey--text text--lighten-3">Kanji</span>
+                                </div>
                                 <span class=".body-2 japaneseFont japaneseFont--light">{{ kanjiNumber }}</span>
                             </div>
                         </v-card-title>
@@ -61,6 +70,12 @@ export default {
    }
 }
 </script>
+
+<style scoped>
+.customTitle {
+    margin-bottom: 10px;
+}
+</style>
 
 
 

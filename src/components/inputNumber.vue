@@ -19,7 +19,7 @@ export default {
         lengthNumber: '',
         outputNumber: '',
         nativeNumbers: [
-          { hira: 'れい', kata: 'レイ', kanji: '' },
+          { hira: 'れい', kata: 'レイ', kanji: '零' },
           { hira: 'いち', kata: 'イチ', kanji: '一' },
           { hira: 'に', kata: '二', kanji: '二' },
           { hira: 'さん', kata: 'サン', kanji: '三' },

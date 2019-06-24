@@ -7,12 +7,14 @@ export default new Vuex.Store({
   state: {
     hiraganaNumber: '',
     katakanaNumber: '',
-    kanjiNumber: ''
+    kanjiNumber: '',
+    showMenu: false
   },
   getters: {
     getHiraganaNumber: state => state.hiraganaNumber,
     getKatakanaNumber: state => state.katakanaNumber,
-    getKanjiNumber: state => state.kanjiNumber
+    getKanjiNumber: state => state.kanjiNumber,
+    getShowMenu: state => state.showMenu
   },
   mutations: {
     SET_NUMBERS: (state, payload) => {
@@ -29,6 +31,12 @@ export default new Vuex.Store({
       state.hiraganaNumber = payload
       state.katakanaNumber = payload
       state.kanjiNumber = payload
+    },
+    OPEN_MENU: (state, payload) => {
+      state.showMenu = payload
+    },
+    CLOSE_MENU: (state, payload) => {
+      state.showMenu = payload
     }
   },
   actions: {
@@ -40,6 +48,12 @@ export default new Vuex.Store({
     },
     clear: (context, payload) => {
       context.commit('CLEAR', payload)
+    },
+    openMenu: (context, payload) => {
+      context.commit('OPEN_MENU', payload)
+    },
+    closeMenu: (context, payload) => {
+      context.commit('CLOSE_MENU', payload)
     }
   }
 })

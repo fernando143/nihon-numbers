@@ -1,6 +1,6 @@
 <template>
     <v-toolbar>
-    <v-toolbar-side-icon></v-toolbar-side-icon>
+    <v-toolbar-side-icon @click.stop="openMenu"></v-toolbar-side-icon>
     <v-toolbar-title class="japaneseFont">日本人 - Numbers</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
@@ -13,7 +13,20 @@
 
 <script>
 export default {
-    
+    data() {
+      return {
+        drawer: null,
+        items: [
+          { title: 'Home', icon: 'dashboard' },
+          { title: 'About', icon: 'question_answer' }
+        ]
+      }
+    },
+    methods: {
+      openMenu() {
+        this.$store.dispatch('openMenu', true)
+      }
+    }
 }
 </script>
 
