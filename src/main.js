@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-import './registerServiceWorker'
+//import './registerServiceWorker'
 
 Vue.use(Vuetify)
 
