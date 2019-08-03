@@ -5,7 +5,7 @@
     <router-view></router-view>
     <v-footer class="pa-3">
       <v-spacer></v-spacer>
-      <div>v0.6.2 - &copy; {{ new Date().getFullYear() }}</div>
+      <div>v0.7.2 - &copy; {{ new Date().getFullYear() }}</div>
   </v-footer>
   </div>
 </template>
