@@ -1,12 +1,11 @@
 <template>
     <v-toolbar>
     <v-toolbar-side-icon @click.stop="openMenu"></v-toolbar-side-icon>
-    <v-toolbar-title class="japaneseFont">日本人 - Numbers</v-toolbar-title>
+    <v-toolbar-title class="titleApp japaneseFont" @click="goTo('/')">日本人 - Numbers</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat>Link One</v-btn>
-      <v-btn flat>Link Two</v-btn>
-      <v-btn flat>Link Three</v-btn>
+      <v-btn flat @click="goTo('game')">Practicar</v-btn>
+      <v-btn flat>Contacto</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -25,12 +24,18 @@ export default {
     methods: {
       openMenu() {
         this.$store.dispatch('openMenu', true)
+      },
+      goTo(route) {
+        this.$router.push({path: route})
       }
     }
 }
 </script>
 
 <style scoped>
+.titleApp {
+  cursor: pointer;
+}
 .japaneseFont {
     font-family: 'Noto Serif JP', serif !important;
 }

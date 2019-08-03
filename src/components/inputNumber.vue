@@ -194,13 +194,15 @@ export default {
       let valueFirstNumber = numberToBeConverted.slice(0,1);
       let restOfNumber = numberToBeConverted.slice(1);
       let countFirstForm;
-      let ruleToTest = new RegExp(/([1-9]0)/);
-      let valueTest = ruleToTest.test(numberToBeConverted);
+      let ruleToTest1 = new RegExp(/([1-9]0)/);
+      let ruleToTest2 = new RegExp(/([1-9][1-9])/);
+      let valueTest1 = ruleToTest1.test(numberToBeConverted);
+      let valueTest2 = ruleToTest2.test(numberToBeConverted);
       let numberToReturn = '';
 
       // only for those numbers [10,...,90]
-      if(valueTest) {
-        switch (valueTest) {
+      if(valueTest1) {
+        switch (valueTest1) {
         case (numberToBeConverted != '10'):
           numberToReturn = {
             hira: this.nativeNumbers[valueFirstNumber].hira + this.nativeNumbers[10].hira,
@@ -218,14 +220,8 @@ export default {
         }
       }
 
-      if(numberToReturn === '') {
-        if(positionOfFirstNumber === 0) {
-          countFirstForm = true
-        } else {
-          countFirstForm = false
-        }
-
-        if(countFirstForm) {
+      if(valueTest2) {
+        if(valueFirstNumber == 1) {
           numberToReturn = {
             hira: this.nativeNumbers[10].hira + this.nativeNumbers[restOfNumber].hira,
             kata: this.nativeNumbers[10].kata + this.nativeNumbers[restOfNumber].kata,
