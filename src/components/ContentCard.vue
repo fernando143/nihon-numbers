@@ -75,6 +75,12 @@ export default {
 .customTitle {
     margin-bottom: 10px;
 }
+.japaneseFont {
+  font-family: 'Noto Serif JP', serif !important;
+}
+.japaneseFont--light {
+  font-weight: 300;
+}
 </style>
 
 

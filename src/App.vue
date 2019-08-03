@@ -1,23 +1,24 @@
 <template>
   <div id="app">
-    <Header></Header>
-    <menu-header></menu-header>
-    <router-view></router-view>
-    <v-footer class="pa-3">
-      <v-spacer></v-spacer>
-      <div>v0.7.2 - &copy; {{ new Date().getFullYear() }}</div>
-  </v-footer>
+    <the-menu></the-menu>
+    <div class="AppContainer">
+      <the-header></the-header>
+      <router-view></router-view>
+      <the-footer></the-footer>
+    </div>
   </div>
 </template>
 
 <script>
-import Header from './components/Header'
-import MenuHeader from './components/Menu'
+import TheHeader from './components/TheHeader'
+import TheFooter from './components/TheFooter'
+import TheMenu from './components/TheMenu'
 export default {
   name: 'App',
   components: {
-    Header,
-    MenuHeader
+    TheHeader,
+    TheFooter,
+    TheMenu
   }
 }
 </script>
@@ -28,5 +29,10 @@ export default {
 }
 .japaneseFont--light {
   font-weight: 300;
+}
+.AppContainer {
+    display: grid;
+    height: 100vh;
+    grid-template-rows: auto 1fr auto;
 }
 </style>
