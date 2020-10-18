@@ -13,6 +13,7 @@
 import TheHeader from './components/TheHeader'
 import TheFooter from './components/TheFooter'
 import TheMenu from './components/TheMenu'
+
 export default {
   name: 'App',
   components: {
